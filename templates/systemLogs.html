@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Penguin Sanctuary Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+      .dashboard-card {
+        transition: all 0.3s ease;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Sidebar Information-->
+    <div class="fixed top-0 left-0 h-screen w-64 bg-gray-100 p-4">
+      <!-- Logo + Title -->
+      <a href="/index" class="flex items-center mb-6 text-gray-800 no-underline">
+        <img src="/static/src/logo.svg" alt="Home" class="w-10 h-8 mr-4" />
+        <span class="text-xl font-semibold text-3xl text-si">PenguinCo</span>
+      </a>
+
+      <hr class="mb-4 border-gray-300" />
+
+      <!-- Nav Links -->
+      <ul class="space-y-2">
+        <!-- Home -->
+        <li class="group mt-0 hover:bg-blue-600 rounded-md transition-colors duration-200">
+          <a href="/index" class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-4 group-hover:stroke-white transition-colors duration-200" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            Home
+          </a>
+        </li>
+
+        <!-- Live Feed -->
+        <li class="group hover:bg-blue-600 rounded-md transition-colors duration-200">
+          <a href="/livefeed" class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-4 group-hover:stroke-white transition-colors duration-200">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+            Live Feed
+          </a>
+        </li>
+
+        <!-- Notifications -->
+        <li class="group bg-blue-100 rounded-md transition-colors duration-200">
+          <a href="/notifications" class="flex items-center px-3 py-2 text-blue-700 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-4 stroke-blue-600 transition-colors duration-200">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+            </svg>
+            Notifications
+          </a>
+        </li>
+
+        <!-- System Logs -->
+        <li class="group hover:bg-blue-600 rounded-md transition-colors duration-200">
+          <a href="/logs" class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-4 group-hover:stroke-white transition-colors duration-200">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+            </svg>
+            System Logs
+          </a>
+        </li>
+
+        <!-- Settings -->
+        <li class="group hover:bg-blue-600 rounded-md transition-colors duration-200">
+          <a href="/settings" class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-4 group-hover:stroke-white transition-colors duration-200">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+            Settings
+          </a>
+        </li>
+      </ul>
+      <hr class="my-4 border-gray-300" />
+
+      <!-- User Menu -->
+      <div class="relative inline-block text-left top-0">
+        <button id="dropdownButton" onclick="toggleDropdown()" class="inline-flex items-center justify-center w-64 text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none">
+          <img src="https://github.com/mdo.png" alt="User" class="w-8 h-8 rounded-full mr-auto" />
+          <strong>Dr Christina</strong>
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="dropdownMenu" class="hidden absolute bottom-full right-0 mb-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">New project...</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+          <hr class="border-t border-gray-200" />
+          <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sign out</a>
+        </div>
+      </div>
+
+      <script>
+        function toggleDropdown() {
+          const menu = document.getElementById("dropdownMenu");
+          menu.classList.toggle("hidden");
+        }
+
+        document.addEventListener("click", function (event) {
+          const dropdown = document.getElementById("dropdownMenu");
+          const button = document.querySelector('[onclick="toggleDropdown()"]');
+
+          if (!dropdown.contains(event.target) && event.target !== button && !button.contains(event.target)) {
+            dropdown.classList.add("hidden");
+          }
+        });
+      </script>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-72 p-8 w-full">
+      <div class="flex flex-col md:flex-row gap-6 mb-8">
+        <!-- Summary Cards -->
+        <div class="dashboard-card bg-white p-6 rounded-lg shadow-md flex-1">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Intrusions</h3>
+          <p class="text-3xl font-bold text-blue-600">142</p>
+          <p class="text-sm text-gray-500 mt-2">+12% from last year</p>
+        </div>
+        
+        <div class="dashboard-card bg-white p-6 rounded-lg shadow-md flex-1">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">This Month</h3>
+          <p class="text-3xl font-bold text-red-600">18</p>
+          <p class="text-sm text-gray-500 mt-2">+3 from last month</p>
+        </div>
+        
+        <div class="dashboard-card bg-white p-6 rounded-lg shadow-md flex-1">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Most Active Zone</h3>
+          <p class="text-2xl font-bold text-green-600">East Perimeter</p>
+          <p class="text-sm text-gray-500 mt-2">42% of all incidents</p>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800">Honey Badger Intrusions Last Year</h2>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 text-sm bg-blue-100 text-blue-600 rounded hover:bg-blue-200">Year</button>
+            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Month</button>
+            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Week</button>
+          </div>
+        </div>
+        <div id="bar-chart"></div>
+      </div>
+
+      <!-- Recent Incidents -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Incidents</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 15, 2023</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">East Perimeter - Zone 4B</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12 minutes</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 12, 2023</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">North Perimeter - Zone 1A</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8 minutes</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 10, 2023</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">West Perimeter - Zone 3C</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">22 minutes</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Investigation</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 8, 2023</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">South Perimeter - Zone 2D</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5 minutes</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Chart Data with more realistic dummy data
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const intrusionData = [8, 5, 12, 15, 10, 14, 18, 16, 12, 10, 7, 9];
+      const resolvedData = [7, 4, 10, 13, 9, 12, 15, 14, 10, 8, 6, 8];
+      
+      var options = {
+        series: [
+          {
+            name: "Intrusions",
+            data: intrusionData,
+            color: '#EF4444'
+          },
+          {
+            name: "Resolved",
+            data: resolvedData,
+            color: '#10B981'
+          }
+        ],
+        chart: {
+          type: "bar",
+          height: 350,
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true,
+              reset: true
+            }
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "55%",
+            endingShape: "rounded",
+            borderRadius: 5
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"]
+        },
+        xaxis: {
+          categories: months,
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          labels: {
+            style: {
+              colors: "#6B7280",
+              fontSize: "12px"
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: "Number of incidents",
+            style: {
+              color: "#6B7280",
+              fontSize: "12px"
+            }
+          },
+          labels: {
+            style: {
+              colors: "#6B7280",
+              fontSize: "12px"
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + " incidents";
+            }
+          }
+        },
+        legend: {
+          position: "top",
+          horizontalAlign: "right",
+          markers: {
+            radius: 12
+          }
+        },
+        grid: {
+          borderColor: "#F3F4F6",
+          strokeDashArray: 4
+        }
+      };
+
+      var chart = new ApexCharts(document.querySelector("#bar-chart"), options);
+      chart.render();
+    </script>
+  </body>
+</html>

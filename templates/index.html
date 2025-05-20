@@ -4,22 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Penguin Sanctuary Dashboard</title>
-    <link rel="icon" type="image/logo" href="src/logo.svg" />
     <!-- ✅ Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-100 text-gray-800">
+    <div class="flex">
     <!-- Sidebar Information-->
-    <div class="flex flex-col fixed p-4 bg-gray-100 w-72 min-h-screen">
+    <div class="fixed top-0 left-0 h-screen w-64 bg-gray-100 p-4">
+
       <!-- Logo + Title -->
       <a
-        href="index.html#"
+        href="/index"
         class="flex items-center mb-6 text-gray-800 no-underline"
       >
         <!-- Placeholder for icon -->
-        <img src="src\logo.svg" alt="Home" class="w-10 h-8 mr-4" />
+        <img src="/static/src/logo.svg" alt="Home" class="w-10 h-8 mr-4" />
 
-        <span class="text-xl font-semibold">PenguinCo</span>
+        <span class="text-xl font-semibold text-3xl text-si">PenguinCo</span>
       </a>
 
       <hr class="mb-4 border-gray-300" />
@@ -28,10 +29,10 @@
       <ul class="space-y-2">
         <!-- Home -->
         <li
-          class="group hover:bg-blue-600 rounded-md transition-colors duration-200"
+          class="group mt-0 hover:bg-blue-600 rounded-md transition-colors duration-200"
         >
           <a
-            href="index.html#"
+            href="/index"
             class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md"
           >
             <svg
@@ -57,7 +58,7 @@
           class="group hover:bg-blue-600 rounded-md transition-colors duration-200"
         >
           <a
-            href="livefeed.html#"
+            href="/livefeed"
             class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md"
           >
             <svg
@@ -83,7 +84,7 @@
           class="group hover:bg-blue-600 rounded-md transition-colors duration-200"
         >
           <a
-            href="notifications.html#"
+            href="/notifications"
             class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md"
           >
             <svg
@@ -109,7 +110,7 @@
           class="group hover:bg-blue-600 rounded-md transition-colors duration-200"
         >
           <a
-            href="systemLogs.html#"
+            href="/logs"
             class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md"
           >
             <svg
@@ -135,7 +136,7 @@
           class="group hover:bg-blue-600 rounded-md transition-colors duration-200"
         >
           <a
-            href="settings.html#"
+            href="/settings"
             class="flex items-center px-3 py-2 text-gray-700 group-hover:text-white rounded-md"
           >
             <svg
@@ -163,13 +164,13 @@
       </ul>
       <hr class="my-4 border-gray-300" />
 
-      <!-- User Dropdown -->
-      <div class="relative inline-block text-left bottom-0
+      <!-- User Menu -->
+      <div class="relative inline-block  text-left top-0">
         <!-- Trigger -->
         <button
           id="dropdownButton"
           onclick="toggleDropdown()"
-          class="inline-flex items-center justify-center w-72 text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none"
+          class="inline-flex items-center justify-center w-64 text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none"
         >
           <img
             src="https://github.com/mdo.png"
@@ -244,7 +245,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="ml-72 p-8 w-full">
+    <div class="ml-64 p-8 pr-10 w-[calc(100%-12rem-2.5rem)] h-screen overflow-y-auto">
       <!-- Header -->
       <header class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800">
@@ -322,67 +323,66 @@
         </div>
       </div>
 
-      <!-- Recent Activity Section -->
-      <div class="bg-white p-6 rounded-lg shadow mb-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Recent Activity</h2>
-          <a href="#" class="text-blue-600 text-sm">View all</a>
+      <div class="flex gap-8">
+  <!-- Recent Activity -->
+  <div class="bg-white p-6 rounded-lg shadow mb-8 w-1/2">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Recent Activity</h2>
+      <a href="#" class="text-blue-600 text-sm">View all</a>
+    </div>
+
+    <div class="space-y-4">
+      <!-- Activity Item 1 -->
+      <div class="flex items-start">
+        <div class="bg-blue-100 p-2 rounded-full mr-4">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
         </div>
-
-        <div class="space-y-4">
-          <!-- Activity Item 1 -->
-          <div class="flex items-start">
-            <div class="bg-blue-100 p-2 rounded-full mr-4">
-              <svg
-                class="w-5 h-5 text-blue-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </div>
-            <div>
-              <p class="font-medium">New penguin arrival</p>
-              <p class="text-gray-500 text-sm">
-                Emperor penguin #142 was admitted to the sanctuary
-              </p>
-              <p class="text-gray-400 text-xs mt-1">2 hours ago</p>
-            </div>
-          </div>
-
-          <!-- Activity Item 2 -->
-          <div class="flex items-start">
-            <div class="bg-green-100 p-2 rounded-full mr-4">
-              <svg
-                class="w-5 h-5 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <div>
-              <p class="font-medium">Health check completed</p>
-              <p class="text-gray-500 text-sm">
-                Annual checkup for penguin #87 showed excellent results
-              </p>
-              <p class="text-gray-400 text-xs mt-1">5 hours ago</p>
-            </div>
-          </div>
+        <div>
+          <p class="font-medium">New penguin arrival</p>
+          <p class="text-gray-500 text-sm">
+            Emperor penguin #142 was admitted to the sanctuary
+          </p>
+          <p class="text-gray-400 text-xs mt-1">2 hours ago</p>
         </div>
       </div>
+
+      <!-- Activity Item 2 -->
+      <div class="flex items-start">
+        <div class="bg-green-100 p-2 rounded-full mr-4">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-medium">Health check completed</p>
+          <p class="text-gray-500 text-sm">
+            Annual checkup for penguin #87 showed excellent results
+          </p>
+          <p class="text-gray-400 text-xs mt-1">5 hours ago</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Stream -->
+  <div class="bg-white p-6 rounded-lg shadow mb-8 w-1/2">
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">Live Stream</h2>
+    </div>
+    <div class="aspect-w-16 aspect-h-9 rounded overflow-hidden shadow">
+      <iframe class="w-full h-full"
+        src="https://www.youtube.com/embed/aqz-KE-bpKQ"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
 
       <!-- Penguin Habitat Status -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -501,6 +501,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </body>
 </html>
