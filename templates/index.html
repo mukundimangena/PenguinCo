@@ -7,6 +7,28 @@
     <!-- ✅ Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      #sanctuary-map {
+        height: 300px;
+        width: 100%;
+        border-radius: 0.5rem;
+        z-index: 0;
+      }
+      .map-container {
+        position: relative;
+      }
+      .map-legend {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      }
+    </style>
   <body class="bg-gray-100 text-gray-800">
     <div class="flex">
     <!-- Sidebar Information-->
@@ -476,30 +498,102 @@
           </script>
         </div>
 
-        <!-- Feeding Schedule -->
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h2 class="text-xl font-semibold mb-4">Today's Feeding Schedule</h2>
-          <div class="space-y-3">
-            <div
-              class="flex justify-between items-center p-3 bg-blue-50 rounded"
-            >
-              <span>Emperor Penguin Zone</span>
-              <span class="font-medium">10:30 AM</span>
+        
+        <!-- Map Feature -->
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Sanctuary Zones</h2>
+            <div class="map-container">
+              <div id="sanctuary-map"></div>
+              <div class="map-legend">
+                <div class="flex items-center mb-1">
+                  <div class="w-4 h-4 bg-blue-500 mr-2"></div>
+                  <span class="text-sm">Section C</span>
+                </div>
+                <div class="flex items-center mb-1">
+                  <div class="w-4 h-4 bg-green-500 mr-2"></div>
+                  <span class="text-sm">Section B</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-4 h-4 bg-yellow-500 mr-2"></div>
+                  <span class="text-sm">Section C</span>
+                </div>
+              </div>
             </div>
-            <div
-              class="flex justify-between items-center p-3 bg-blue-50 rounded"
-            >
-              <span>Adélie Penguin Zone</span>
-              <span class="font-medium">11:45 AM</span>
-            </div>
-            <div
-              class="flex justify-between items-center p-3 bg-blue-50 rounded"
-            >
-              <span>Chinstrap Penguin Zone</span>
-              <span class="font-medium">2:15 PM</span>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="bg-blue-50 p-3 rounded">
+                <h3 class="font-medium">Section A</h3>
+                <p class="text-sm text-gray-600">Next feeding: 10:30 AM</p>
+              </div>
+              <div class="bg-green-50 p-3 rounded">
+                <h3 class="font-medium">Section B</h3>
+                <p class="text-sm text-gray-600">Next feeding: 11:45 AM</p>
+              </div>
+              <div class="bg-yellow-50 p-3 rounded">
+                <h3 class="font-medium">Section C</h3>
+                <p class="text-sm text-gray-600">Next feeding: 2:15 PM</p>
+              </div>
             </div>
           </div>
-        </div>
+           <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+<script>
+  // Center map on Hermanus coastline
+  const map = L.map('sanctuary-map').setView([-34.777825, 19.672227], 14);
+
+  // Add OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Define realistic zones (adjusted for Walker Bay area)
+  const zones = [
+    {
+      name: "Section C",
+      coordinates: [
+        [-34.775, 19.66], [-34.775, 19.68], 
+        [-34.785, 19.68], [-34.785, 19.66]
+      ],
+      color: "#3b82f6",
+      description: "East Facing Camera's"
+    },
+    {
+      name: "Section B",
+      coordinates: [
+        [-34.77, 19.665], [-34.77, 19.675], 
+        [-34.78, 19.675], [-34.78, 19.665]
+      ],
+      color: "#10b981",
+      description: "West Facing Camera's"
+    },
+    {
+      name: "Section A",
+      coordinates: [
+        [-34.78, 19.67], [-34.78, 19.68], 
+        [-34.785, 19.68], [-34.785, 19.67]
+      ],
+      color: "#eab308",
+      description: "North Facing Camera's and Entrance"
+    }
+  ];
+
+  // Add zones to map
+  zones.forEach(zone => {
+    L.polygon(zone.coordinates, {
+      color: zone.color,
+      fillOpacity: 0.2,
+      weight: 3
+    })
+    .addTo(map)
+    .bindPopup(`<b>${zone.name}</b><br>${zone.description}`);
+  });
+
+  // Main marker (your original coordinates)
+  L.marker([-34.777825, 19.672227])
+    .addTo(map)
+    .bindPopup("<b>Focus Point</b><br>-34.777825, 19.672227")
+    .openPopup();
+</script>
       </div>
     </div>
     </div>
