@@ -390,20 +390,32 @@
     </div>
   </div>
 
-  <!-- Live Stream -->
-  <div class="bg-white p-6 rounded-lg shadow mb-8 w-1/2">
-    <div class="mb-4">
-      <h2 class="text-xl font-semibold">Live Stream</h2>
-    </div>
-    <div class="aspect-w-16 aspect-h-9 rounded overflow-hidden shadow">
-      <iframe class="w-full h-full"
-        src="https://www.youtube.com/embed/aqz-KE-bpKQ"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>
-  </div>
+ <!-- Livestream -->
+        <div id="stream3" class="stream-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
+          <div class="relative bg-black h-48 mr-2 flex items-center justify-center">
+            <div id="stream3Preview" class="text-white text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <p>Click to view</p>
+            </div>
+            <div id="stream3Live" class="hidden absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded flex items-center">
+              <span class="w-2 h-2 bg-white rounded-full mr-1 animate-pulse"></span>
+              LIVE
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Section 3C</h3>
+            <p class="text-gray-600 text-sm">Entrance Section</p>
+            <div class="mt-2 flex items-center text-sm text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Sector 3C - Coordinates: 62.2° S, 58.3° W
+            </div>
+          </div>
+        </div>
 </div>
 
       <!-- Penguin Habitat Status -->
@@ -594,6 +606,131 @@
     .bindPopup("<b>Focus Point</b><br>-34.777825, 19.672227")
     .openPopup();
 </script>
+ <script>
+      // Current active stream
+      let activeStream = 'stream1';
+      let isStreaming = false;
+
+      // Initialize stream selection
+      document.addEventListener('DOMContentLoaded', function() {
+        // Highlight active stream in sidebar
+        document.querySelector('a[href="/livefeed"]').parentElement.classList.add('bg-blue-100');
+        
+        // Set up stream card click handlers
+        document.querySelectorAll('.stream-card').forEach(card => {
+          card.addEventListener('click', function() {
+            // Remove active class from all cards
+            document.querySelectorAll('.stream-card').forEach(c => {
+              c.classList.remove('stream-active');
+              c.classList.remove('border-blue-500');
+            });
+            
+            // Add active class to clicked card
+            this.classList.add('stream-active');
+            this.classList.add('border-blue-500');
+            
+            // Update active stream
+            activeStream = this.id;
+            
+            // Update main viewer
+            updateMainStreamViewer();
+          });
+        });
+
+        // Set up start/stop stream buttons
+        document.getElementById('startStreamBtn').addEventListener('click', startStream);
+        document.getElementById('stopStreamBtn').addEventListener('click', stopStream);
+        
+        // Set up fullscreen button
+        document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+        
+        // Set up snapshot button
+        document.getElementById('snapshotBtn').addEventListener('click', takeSnapshot);
+      });
+
+      // Update main stream viewer
+      function updateMainStreamViewer() {
+        const card = document.getElementById(activeStream);
+        const title = card.querySelector('h3').textContent;
+        const location = card.querySelector('p').textContent + ' - ' + 
+                        card.querySelector('.text-gray-500').textContent;
+        
+        document.getElementById('currentStreamTitle').textContent = title;
+        document.getElementById('currentStreamLocation').textContent = location;
+        
+        if (isStreaming) {
+          // In a real app, you would connect to the actual stream source here
+          document.getElementById('mainStreamPlaceholder').classList.add('hidden');
+          document.getElementById('mainStreamPlayer').classList.remove('hidden');
+          
+          // Simulate stream loading
+          document.getElementById('mainStreamPlayer').src = `https://example.com/streams/${activeStream}`;
+        }
+      }
+
+      // Start stream function
+      function startStream() {
+        isStreaming = true;
+        document.getElementById('startStreamBtn').disabled = true;
+        document.getElementById('stopStreamBtn').disabled = false;
+        
+        // Show LIVE indicator on active stream
+        document.getElementById(`${activeStream}Live`).classList.remove('hidden');
+        
+        // Update main viewer
+        updateMainStreamViewer();
+      }
+
+      // Stop stream function
+      function stopStream() {
+        isStreaming = false;
+        document.getElementById('startStreamBtn').disabled = false;
+        document.getElementById('stopStreamBtn').disabled = true;
+        
+        // Hide LIVE indicator
+        document.getElementById(`${activeStream}Live`).classList.add('hidden');
+        
+        // Reset main viewer
+        document.getElementById('mainStreamPlaceholder').classList.remove('hidden');
+        document.getElementById('mainStreamPlayer').classList.add('hidden');
+      }
+      
+
+      // Toggle fullscreen
+      function toggleFullscreen() {
+        const player = document.getElementById('mainStreamPlayer');
+        if (!document.fullscreenElement) {
+          if (player.requestFullscreen) {
+            player.requestFullscreen();
+          } else if (player.webkitRequestFullscreen) {
+            player.webkitRequestFullscreen();
+          } else if (player.msRequestFullscreen) {
+            player.msRequestFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      }
+
+      // Take snapshot
+      function takeSnapshot() {
+        if (!isStreaming) {
+          alert('Please start the stream first');
+          return;
+        }
+        
+        // In a real app, you would capture the current frame here
+        alert('Snapshot captured! This would save the current frame in a real implementation.');
+        
+        // Simulate flash effect
+        const flash = document.createElement('div');
+        flash.className = 'absolute inset-0 bg-white opacity-70 z-10';
+        document.querySelector('.bg-black').appendChild(flash);
+        setTimeout(() => flash.remove(), 200);
+      }
+    </script>
       </div>
     </div>
     </div>
