@@ -7,12 +7,16 @@ from models import Base, User
 from database import engine, SessionLocal
 from auth import verify_password, hash_password
 from fastapi.staticfiles import StaticFiles
+from esp32 import router as esp_router
 
 app = FastAPI()
+app.include_router(esp_router)
 templates = Jinja2Templates(directory="templates")
 
+# Create all database tables
 Base.metadata.create_all(bind=engine)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
@@ -49,12 +53,10 @@ def login(
         }
     )
 
-# ✅ Registration page
 @app.get("/register", response_class=HTMLResponse)
 def register_form(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
-# ✅ Handle account creation
 @app.post("/register")
 def register(
     request: Request,
@@ -66,12 +68,11 @@ def register(
     if existing_user:
         return templates.TemplateResponse("register.html", {"request": request, "error": "Username already exists."})
     
-    new_user = User(username=username, hashed_password= hash_password(password))
+    new_user = User(username=username, hashed_password=hash_password(password))
     db.add(new_user)
     db.commit()
     return RedirectResponse("/", status_code=302)
 
-# ✅ routing to apps 
 @app.get("/index", response_class=HTMLResponse)
 def index_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
