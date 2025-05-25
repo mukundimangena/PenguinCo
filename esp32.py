@@ -8,6 +8,9 @@ from models import (
     SensorResponse, APIResponse, DeviceInfo
 )
 from database import SessionLocal
+import threading
+
+db_lock = threading.Lock()
 
 router = APIRouter(prefix="/api")
 
@@ -32,9 +35,11 @@ async def receive_sensor_data(reading: SensorReading, db: Session = Depends(get_
             timestamp=datetime.utcnow()
         )
         
-        db.add(db_reading)
-        db.commit()
-        db.refresh(db_reading)
+        with db_lock:
+            db.add(db_reading)
+            db.commit()
+            db.refresh(db_reading)
+
         
         return APIResponse(
             status="success",
@@ -66,8 +71,8 @@ async def receive_batch_data(batch_data: BatchSensorData, db: Session = Depends(
             db.add(db_reading)
             db.flush()  # Flush to get the ID without committing
             inserted_ids.append(db_reading.id)
-        
-        db.commit()
+        with db_lock:
+            db.commit()
         
         return APIResponse(
             status="success",
