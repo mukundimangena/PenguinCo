@@ -21,11 +21,31 @@ class Notification(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    time = Column(String, nullable=False)
+    time = Column(DateTime, default=datetime.utcnow)  # Changed to DateTime
     priority = Column(String, nullable=False)
     location = Column(String, nullable=False)
     status = Column(String, nullable=False)
     icon = Column(String, nullable=False)
+    event_type = Column(String)  # for system logs
+    device = Column(String)      # for system logs
+    
+class NotificationBase(BaseModel):
+    title: str
+    content: str
+    time: Optional[str] = None  # Make optional with default None
+    priority: Optional[str] = "Medium"  # Default value
+    location: Optional[str] = "Unknown"  # Default value
+    status: Optional[str] = "Unread"  # Default value
+    icon: Optional[str] = "alert"  # Default value
+
+class NotificationCreate(NotificationBase):
+    pass
+
+class NotificationResponse(NotificationBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
 
 class ESPTEST(Base):
     __tablename__ = "esptest"

@@ -5,7 +5,8 @@ from typing import List, Optional
 from datetime import datetime
 from models import (
     SensorData, SensorReading, BatchSensorData, 
-    SensorResponse, APIResponse, DeviceInfo
+    SensorResponse, APIResponse, DeviceInfo,
+    Notification, NotificationCreate, NotificationResponse  
 )
 from database import SessionLocal
 import threading
@@ -21,6 +22,42 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+
+@router.post("/sensor-notification",  # Fixed typo in endpoint name
+             response_model=NotificationResponse,  # Use the response model
+             tags=["ESP32 Sensors"])
+async def create_notification(
+    notification_data: NotificationCreate,  # Use the create model for input
+    db: Session = Depends(get_db)
+):
+    """Create a new notification from sensor data"""
+    try:
+        # Create SQLAlchemy model instance (don't include ID - let DB generate it)
+        db_notification = Notification(
+            title=notification_data.title,
+            content=notification_data.content,
+            time=notification_data.time or datetime.utcnow().isoformat(),
+            priority=notification_data.priority or "Medium",
+            location=notification_data.location or "Unknown",
+            status=notification_data.status or "Unread",
+            icon=notification_data.icon or "alert"
+        )
+        
+        with db_lock:
+            db.add(db_notification)
+            db.commit()
+            db.refresh(db_notification)
+
+        return db_notification  # Will be automatically converted to NotificationResponse
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error creating notification: {str(e)}"
+        )
 
 @router.post("/sensor-data", response_model=APIResponse, tags=["ESP32 Sensors"])
 async def receive_sensor_data(reading: SensorReading, db: Session = Depends(get_db)):
@@ -180,3 +217,52 @@ async def get_esp32_devices(db: Session = Depends(get_db)):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+@router.get("/notifications", 
+            response_model=List[NotificationResponse], 
+            tags=["Notifications"])
+async def get_notifications(
+    limit: int = Query(100, description="Maximum number of notifications to return"),
+    status: Optional[str] = Query(None, description="Filter by status (e.g., 'Unread', 'Read')"),
+    priority: Optional[str] = Query(None, description="Filter by priority (e.g., 'High', 'Medium', 'Low')"),
+    db: Session = Depends(get_db)
+):
+    """Get all notifications with optional filtering"""
+    try:
+        query = db.query(Notification)
+        
+        if status:
+            query = query.filter(Notification.status == status)
+            
+        if priority:
+            query = query.filter(Notification.priority == priority)
+            
+        notifications = query.order_by(Notification.time.desc()).limit(limit).all()
+        
+        return notifications
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/notifications/{notification_id}", 
+            response_model=NotificationResponse, 
+            tags=["Notifications"])
+async def get_notification(
+    notification_id: int,
+    db: Session = Depends(get_db)
+):
+    """Get a specific notification by ID"""
+    try:
+        notification = db.query(Notification).filter(Notification.id == notification_id).first()
+        
+        if not notification:
+            raise HTTPException(status_code=404, detail="Notification not found")
+            
+        return notification
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
