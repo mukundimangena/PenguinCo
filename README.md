@@ -1,9 +1,18 @@
-#This was my first semester project development for the Solution to the Predator Deterence system for Birdlife South Africa#
+# Predator Deterrence System – BirdLife South Africa
 
-To load this repository and set it up on local host you need a postgreSQL database server. When you clone the repository move into the file directory 
-<li><item>create a python virtual environment </item>
-<item>Activate the environment</item>
-<item>Install the addons using : pip install -r requirements.txt</item>
-</li>
+This repository contains my first semester project: the development of a solution for a predator deterrence system for **BirdLife South Africa**.
 
-NB : The database URI is personalised to your machine 
+## 🚀 Project Overview
+
+This system is designed to detect and deter predators from protected bird habitats, specifically tailored for deployment in South African conservation environments.
+
+## 🛠️ Getting Started
+
+To run this project on your local machine, you'll need a working **PostgreSQL** database server and a Python environment.
+
+### 📦 Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd <project-directory>
